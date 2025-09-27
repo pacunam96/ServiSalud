@@ -240,7 +240,7 @@ if authentication_status:
         "📊 Análisis y Patrones",
         "👥 Comunidad y Reportes"
     ])
-    
+
     with acct_tab:
         st.markdown("### ⚙️ Configuración de Cuenta")
         
@@ -271,8 +271,8 @@ if authentication_status:
         
         # Reset password
         st.markdown("#### 🔄 Reset password")
-        authenticator.reset_password(username=username, location="main")
-    
+        authenticator.reset_password(username, "Reset password")
+
     with health_tab:
         st.markdown("""
         <div class="info-box">
@@ -642,55 +642,6 @@ if authentication_status:
                     labels={'consultas_generales': 'Número de Consultas', 'count': 'Frecuencia'}
                 )
                 st.plotly_chart(fig_hist2, use_container_width=True)
-            
-            # Identificación de Patrones
-            st.markdown("### 🔍 Identificación de Patrones")
-            
-            col1, col2, col3 = st.columns(3)
-            
-            with col1:
-                st.markdown("""
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                            padding: 1.5rem; border-radius: 15px; color: white; text-align: center; 
-                            box-shadow: 0 8px 32px rgba(0,0,0,0.1); margin-bottom: 1rem;">
-                    <h3 style="margin: 0 0 0.5rem 0; font-size: 1.5rem;">🌧️ Temporada de Lluvias</h3>
-                    <p style="margin: 0 0 0.5rem 0; font-size: 1.2rem; font-weight: bold;">+25% Consultas Respiratorias</p>
-                    <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">
-                        <strong>Patrón identificado:</strong> Incremento en infecciones respiratorias durante marzo-mayo y octubre-diciembre
-                    </p>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            with col2:
-                st.markdown("""
-                <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); 
-                            padding: 1.5rem; border-radius: 15px; color: white; text-align: center; 
-                            box-shadow: 0 8px 32px rgba(0,0,0,0.1); margin-bottom: 1rem;">
-                    <h3 style="margin: 0 0 0.5rem 0; font-size: 1.5rem;">💉 Campañas de Vacunación</h3>
-                    <p style="margin: 0 0 0.5rem 0; font-size: 1.2rem; font-weight: bold;">Picos Mensuales</p>
-                    <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">
-                        <strong>Patrón identificado:</strong> Mayor demanda en los primeros 15 días de cada mes
-                    </p>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            with col3:
-                st.markdown("""
-                <div style="background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%); 
-                            padding: 1.5rem; border-radius: 15px; color: white; text-align: center; 
-                            box-shadow: 0 8px 32px rgba(0,0,0,0.1); margin-bottom: 1rem;">
-                    <h3 style="margin: 0 0 0.5rem 0; font-size: 1.5rem;">🌡️ Cambios de Temperatura</h3>
-                    <p style="margin: 0 0 0.5rem 0; font-size: 1.2rem; font-weight: bold;">Invierno: +40%</p>
-                    <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">
-                        <strong>Patrón identificado:</strong> Incremento en consultas generales durante temporada invernal
-                    </p>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            # Sección adicional de evolución temporal
-            st.markdown("### ✅ Evolución Temporal de la Demanda")
-            st.info("📈 Los patrones identificados se basan en el análisis de datos históricos y permiten predecir tendencias futuras para una mejor planificación de recursos sanitarios.")
-            
         else:
             st.info("📊 Carga datos en el Dashboard de Salud Pública para ver análisis de patrones")
 
