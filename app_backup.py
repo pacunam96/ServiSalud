@@ -509,7 +509,7 @@ if authentication_status:
             unique_services = df['tipo_servicio'].nunique() if 'tipo_servicio' in df.columns else df.nunique().sum()
             
             col1, col2, col3, col4, col5 = st.columns(5)
-            with col1:
+                        with col1:
                 st.markdown(f"""
                 <div class="metric-card">
                     <h4>📊 Total Registros</h4>
@@ -517,39 +517,36 @@ if authentication_status:
                     <p>Servicios de salud registrados</p>
                 </div>
                 """, unsafe_allow_html=True)
-                with col2:
+                        with col2:
                 st.markdown(f"""
                 <div class="metric-card">
                     <h4>🏥 Entidades</h4>
                     <h2>{unique_entities:,}</h2>
-                    <p>Centros de salud únicos</p>
+                        with col3:
                 </div>
                 """, unsafe_allow_html=True)
-                """, unsafe_allow_html=True)
-            with col2:
-            with col2:
+                        with col3:
+                st.markdown(f"""
                 <div class="metric-card">
                     <h4>📍 Municipios</h4>
-                    <h2>{unique_locations:,}</h2>
+                        with col4:
                     <p>Ubicaciones diferentes</p>
                 </div>
                 """, unsafe_allow_html=True)
-            
-                """, unsafe_allow_html=True)
+                        with col4:
                 st.markdown(f"""
                 <div class="metric-card">
-            with col3:
-                    <h2>{unique_services:,}</h2>
+                    <h4>🩺 Tipos de Servicio</h4>
+                        with col5:
                     <p>Servicios disponibles</p>
                 </div>
                 """, unsafe_allow_html=True)
-            
-            with col5:
+                        with col5:
                 source_icon = "🌐" if data_source == 'real' else "📊"
-                """, unsafe_allow_html=True)
+                source_text = 'Real' if data_source == 'real' else 'Muestra'
                 coverage = "Cundinamarca & Boyacá" if unique_departments <= 2 else "Nacional"
                 st.markdown(f"""
-            with col4:
+                <div class="metric-card">
                     <h4>📡 Fuente</h4>
                     <h3>{source_icon} {source_text}</h3>
                     <p>Cobertura: {coverage}</p>
@@ -557,10 +554,12 @@ if authentication_status:
                 """, unsafe_allow_html=True)
             
             # Usar todos los datos para análisis
-                """, unsafe_allow_html=True)
+            df_filtered = df.copy()
+            
             # Gráficos principales con mejor diseño y detección inteligente
+            st.markdown("---")
             st.markdown("### 📊 Análisis Visual de Datos")
-            with col5:
+            
             # Detectar columnas disponibles de manera más inteligente
             dept_cols = [col for col in df_filtered.columns if any(word in col.lower() for word in ['departamento', 'depto', 'departament', 'region', 'estado'])]
             service_cols = [col for col in df_filtered.columns if any(word in col.lower() for word in ['tipo', 'servicio', 'categoria', 'especialidad', 'modalidad', 'service', 'type'])]
@@ -709,7 +708,7 @@ if authentication_status:
                             fig_col.update_layout(height=400, title_x=0.5)
                             st.plotly_chart(fig_col, use_container_width=True)
                     
-                    with col2:
+                        with col2:
                         # Análisis de la segunda columna categórica o numérica
                         if len(categorical_cols) > 1:
                             second_cat_col = categorical_cols[1]
@@ -786,22 +785,22 @@ if authentication_status:
                         
                         # Estadísticas del mapa mejoradas
                         col1, col2, col3, col4 = st.columns(4)
-                        with col:
+                        with col1:
                             st.markdown(f"""
                             <div class="metric-card">
                                 <h4>📍 Puntos Mapeados</h4>
                                 <h2>{len(df_map):,}</h2>
                             </div>
                             """, unsafe_allow_html=True)
-                        with col:
+                        with col2:
                             cobertura_mapa = (len(df_map)/len(df_filtered)*100) if len(df_filtered) > 0 else 0
                             st.markdown(f"""
                             <div class="metric-card">
                                 <h4>📊 Cobertura</h4>
                                 <h2>{cobertura_mapa:.1f}%</h2>
                             </div>
-                            """, unsafe_allow_html=True)
-                        with col:
+                        )
+                        with col3:
                             municipios_mapa = df_map[location_cols[0]].nunique() if len(location_cols) > 0 else len(df_map)
                             st.markdown(f"""
                             <div class="metric-card">
@@ -809,7 +808,7 @@ if authentication_status:
                                 <h2>{municipios_mapa:,}</h2>
                             </div>
                             """, unsafe_allow_html=True)
-                        with col:
+                        with col4:
                             departamentos_mapa = df_map[dept_cols[0]].nunique() if len(dept_cols) > 0 else 1
                             st.markdown(f"""
                             <div class="metric-card">
@@ -819,6 +818,8 @@ if authentication_status:
                             """, unsafe_allow_html=True)
                     else:
                         st.warning("⚠️ No se encontraron coordenadas válidas para Colombia")
+                except Exception as e:
+                    st.error(f"❌ Error al procesar coordenadas: {str(e)}")
             # Si no hay coordenadas, no mostrar la sección del mapa
             
             # Tabla de datos mejorada
@@ -842,7 +843,7 @@ if authentication_status:
                 # Botones de descarga mejorados
                 col1, col2, col3 = st.columns(3)
                 
-                with col1:
+                        with col1:
                     csv = df_filtered[display_cols].to_csv(index=False)
                     st.download_button(
                         label="📥 Descargar CSV",
@@ -852,7 +853,7 @@ if authentication_status:
                         use_container_width=True
                     )
                 
-                with col2:
+                        with col2:
                     excel_data = df_filtered[display_cols].to_excel(index=False)
                     st.download_button(
                         label="📊 Descargar Excel",
@@ -862,7 +863,7 @@ if authentication_status:
                         use_container_width=True
                     )
                 
-                with col3:
+                        with col3:
                     json_data = df_filtered[display_cols].to_json(orient='records', indent=2)
                     st.download_button(
                         label="📄 Descargar JSON",
@@ -920,7 +921,7 @@ if authentication_status:
             # Gráficos de análisis temporal
             col1, col2 = st.columns(2)
             
-                        with col:
+                        with col1:
                 st.markdown("#### 📊 Tendencias Mensuales")
                 monthly_data = temporal_data.groupby('mes').agg({
                     'consultas_respiratorias': 'mean',
@@ -944,7 +945,7 @@ if authentication_status:
                 )
                 st.plotly_chart(fig_monthly, use_container_width=True)
             
-                        with col:
+                        with col2:
                 st.markdown("#### 🌧️ Patrones Estacionales")
                 seasonal_data = temporal_data.groupby('estacion').agg({
                     'consultas_respiratorias': 'mean',
@@ -968,7 +969,7 @@ if authentication_status:
                 
             col1, col2, col3 = st.columns(3)
                 
-                        with col:
+                        with col1:
                 st.markdown("""
                 <div class="metric-card">
                     <h4>🌧️ Temporada de Lluvias</h4>
@@ -977,7 +978,7 @@ if authentication_status:
                 </div>
                 """, unsafe_allow_html=True)
             
-                        with col:
+                        with col2:
                 st.markdown("""
                 <div class="metric-card">
                     <h4>💉 Campañas de Vacunación</h4>
@@ -986,7 +987,7 @@ if authentication_status:
                 </div>
                 """, unsafe_allow_html=True)
             
-                        with col:
+                        with col3:
                 st.markdown("""
                 <div class="metric-card">
                     <h4>🌡️ Cambios de Temperatura</h4>
@@ -1022,6 +1023,13 @@ if authentication_status:
             )
             st.plotly_chart(fig_temporal, use_container_width=True)
             
+            # Información sobre los ejes
+            st.info("""
+            **📊 Interpretación de los Ejes:**
+            - **Eje X (Horizontal):** Fecha - Muestra la evolución temporal día a día
+            - **Eje Y (Vertical):** Número de Consultas - Cantidad de demanda diaria por tipo de servicio
+            - **Líneas:** Cada color representa un tipo diferente de consulta médica
+            """)
             
             # Sección de Predicciones con Machine Learning
             st.markdown("---")
@@ -1033,7 +1041,7 @@ if authentication_status:
             # Crear modelos de regresión lineal para cada tipo de consulta
             col1, col2 = st.columns(2)
             
-                        with col:
+                        with col1:
                 st.markdown("#### 📊 Modelo de Regresión Lineal")
                 
                 # Entrenar modelo para consultas respiratorias
@@ -1138,7 +1146,7 @@ if authentication_status:
                 
                             st.plotly_chart(fig_pred, use_container_width=True)
                     
-                        with col:
+                        with col2:
                 st.markdown("#### 📈 Métricas del Modelo")
                 
                 # Calcular métricas de rendimiento
@@ -1247,7 +1255,7 @@ if authentication_status:
             
             col1, col2 = st.columns(2)
             
-                with col1:
+                        with col1:
                 st.markdown("#### 🎯 Clasificación de Niveles de Demanda")
                 
                 # Distribución de niveles de demanda históricos
@@ -1274,7 +1282,7 @@ if authentication_status:
                 fig_pred_demand.update_layout(height=300, title_x=0.5)
                 st.plotly_chart(fig_pred_demand, use_container_width=True)
             
-                with col2:
+                        with col2:
                 st.markdown("#### 📊 Análisis de Características")
                 
                 # Importancia de características
@@ -1324,7 +1332,7 @@ if authentication_status:
             
             col1, col2 = st.columns(2)
             
-                    with col1:
+                with col1:
                 fig_hist = px.histogram(
                     temporal_data,
                     x='consultas_respiratorias',
@@ -1344,7 +1352,7 @@ if authentication_status:
                 )
                 st.plotly_chart(fig_hist, use_container_width=True)
             
-                    with col2:
+                with col2:
                 fig_hist2 = px.histogram(
                     temporal_data,
                     x='consultas_generales',
@@ -1389,7 +1397,7 @@ if authentication_status:
             with st.form("symptoms_form"):
                 col1, col2 = st.columns(2)
                 
-                        with col:
+                        with col1:
                     st.markdown("#### 📍 Información de Ubicación")
                     departamento = st.selectbox(
                         "Departamento:",
@@ -1409,7 +1417,7 @@ if authentication_status:
                         key="symptoms_neighborhood"
                     )
                 
-                        with col:
+                        with col2:
                     st.markdown("#### 🩺 Síntomas Observados")
                     
                     symptoms = st.multiselect(
@@ -1464,7 +1472,7 @@ if authentication_status:
             with st.form("availability_form"):
                 col1, col2 = st.columns(2)
                 
-                        with col:
+                        with col1:
                     st.markdown("#### 👤 Información Personal")
                     name_volunteer = st.text_input(
                         "Nombre completo:",
@@ -1494,7 +1502,7 @@ if authentication_status:
                         key="volunteer_profession"
                     )
                 
-                        with col:
+                        with col2:
                     st.markdown("#### 📅 Disponibilidad")
                     
                     days_available = st.multiselect(
